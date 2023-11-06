@@ -1,0 +1,100 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+#define new_node (struct Node *)malloc(sizeof(struct Node));
+
+struct Node
+{
+    int data;
+    struct Node *next;
+};
+
+int maximum(int ar[], int n)
+{
+    int mx = ar[0];
+    for (int i = 1; i < n; i++)
+    {
+        if (mx < ar[i])
+            mx = ar[i];
+    }
+    return mx;
+}
+
+void insert(struct Node *r[], int d, int num)
+{
+    struct Node *p = r[d], *t = NULL;
+    t = new_node;
+    t->data = num;
+    t->next = NULL;
+    if (r[d] == 0)
+        r[d] = t;
+    else
+    {
+        while (p->next != NULL)
+        {
+            p = p->next;
+        }
+        p->next = t;
+    }
+}
+
+void delete(struct Node **head)
+{
+    struct Node *p = (*head);
+    (*head) = (*head)->next;
+    free(p);
+}
+
+void arrange(struct Node **head, int ar[], int *k)
+{
+    while (*head)
+    {
+        ar[*k] = (*head)->data;
+        (*k)++;
+        delete (&(*head));
+    }
+}
+
+void display(int ar[], int n)
+{
+    for (int i = 0; i < n; i++)
+        printf("%d ", ar[i]);
+    printf("\n\n");
+}
+
+int main()
+{
+    int ar[] = {23, 14, 25, 348, 15, 163, 235, 488, 3, 62};
+    int size = sizeof(ar) / sizeof(ar[0]);
+
+    printf("ORIGINAL ARRAY : ");
+    display(ar, size);
+    int max = maximum(ar, size);
+
+    int digit = floor(log10(max)) + 1;
+    struct Node *r[10] = {0};
+    int k = 1;
+
+    for (int i = 1; i <= digit; i++)
+    {
+        for (int j = 0; j < size; j++)
+        {
+            int d = (ar[j] / k) % 10;
+            insert(r, d, ar[j]);
+        }
+        int l = 0;
+        for (int j = 0; j < 10; j++)
+        {
+            if (r[j] != 0)
+            {
+                arrange(&r[j], ar, &l);
+            }
+        }
+        k = k * 10;
+    }
+
+    printf("SORTED ARRAY : ");
+    display(ar, size);
+    return 0;
+}

@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <math.h>
 
+
+// This code was edited to check the edit function in github by yash on the date 6/11/23
+
 #define new_node (struct Node *)malloc(sizeof(struct Node));
 
 struct Node
